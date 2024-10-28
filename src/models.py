@@ -16,10 +16,12 @@ def setup_db(app):
     db.init_app(app)
 
 
-class Movies(db.Model):
+class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250))
     release_date = db.Column(db.DateTime, nullable=False)
+
+    actor_id = db.Column(db.Integer, db.ForeignKey("Actor.id"), nullable=False)
 
     def get(self):
         return {
@@ -34,16 +36,20 @@ class Movies(db.Model):
             db.session.commit()
         except Exception as e:
             print(e)
+            return False
         finally:
             db.session.close()
+        return True
 
     def update(self):
         try:
             db.session.commit()
         except Exception as e:
             print(e)
+            return False
         finally:
             db.session.close()
+        return True
 
     def delete(self):
         try:
@@ -51,18 +57,22 @@ class Movies(db.Model):
             db.session.commit()
         except Exception as e:
             print(e)
+            return False
         finally:
             db.session.close()
+        return True
 
     def __repr__(self):
         return json.dumps(self.get())
 
 
-class Actors(db.Model):
+class Actor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(250))
     age = db.Column(db.Interger)
     gender = db.Column(db.String(120))
+
+    movies = db.relationship("Movie", backref="actor", lazy=True)
 
     def get(self):
         return {
@@ -78,16 +88,20 @@ class Actors(db.Model):
             db.session.commit()
         except Exception as e:
             print(e)
+            return False
         finally:
             db.session.close()
+        return True
 
     def update(self):
         try:
             db.session.commit()
         except Exception as e:
             print(e)
+            return False
         finally:
             db.session.close()
+        return True
 
     def delete(self):
         try:
@@ -95,8 +109,10 @@ class Actors(db.Model):
             db.session.commit()
         except Exception as e:
             print(e)
+            return False
         finally:
             db.session.close()
+        return True
 
     def __repr__(self):
         return json.dumps(self.get())
