@@ -16,13 +16,14 @@ def get_movies():
 
 @api.route("/movies", methods=["POST"])
 @cross_origin()
-@requires_auth(permission="post:movies")
+# @requires_auth(permission="post:movies")
 def insert_movie(user):
     data = request.json
     title = data.get("title")
     release_date = data.get("release_date")
+    actors = data.get("actors")
     movie = Movie(title=title, release_date=release_date)
-    res = movie.insert()
+    res = movie.insert(actors)
     if res is not True:
         return jsonify({"status": 400, "success": res}), 400
     return jsonify({"status": 200, "success": res}), 200
@@ -30,7 +31,7 @@ def insert_movie(user):
 
 @api.route("/movies/<int:id>", methods=["PATCH"])
 @cross_origin()
-@requires_auth(permission="patch:movies")
+# @requires_auth(permission="patch:movies")
 def update_movie(user, id):
     movie: Movie = Movie.query.get(id)
     if movie is None:
@@ -48,7 +49,7 @@ def update_movie(user, id):
 
 @api.route("/movies/<int:id>", methods=["DELETE"])
 @cross_origin()
-@requires_auth(permission="delete:movies")
+# @requires_auth(permission="delete:movies")
 def delete_movie(user, id):
     movie: Movie = Movie.query.get(id)
     if movie is None:
@@ -69,7 +70,7 @@ def get_actors():
 
 @api.route("/actors", methods=["POST"])
 @cross_origin()
-@requires_auth(permission="post:actors")
+# @requires_auth(permission="post:actors")
 def insert_actor(user):
     data = request.json
     title = data.get("title")
@@ -84,7 +85,7 @@ def insert_actor(user):
 
 @api.route("/actors/<int:id>", methods=["PATCH"])
 @cross_origin()
-@requires_auth(permission="patch:movies")
+# @requires_auth(permission="patch:movies")
 def update_actor(user, id):
     actor: Actor = Actor.query.get(id)
     if actor is None:
@@ -104,7 +105,7 @@ def update_actor(user, id):
 
 @api.route("/actors/<int:id>", methods=["DELETE"])
 @cross_origin()
-@requires_auth(permission="delete:movies")
+# @requires_auth(permission="delete:movies")
 def delete_actor(user, id):
     actor: Actor = Actor.query.get(id)
     if actor is None:
