@@ -3,11 +3,13 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from api import api
+from models import setup_db
 
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
+    setup_db(app=app)
     CORS(app)
 
     app.register_blueprint(api, url_prefix=f"/")

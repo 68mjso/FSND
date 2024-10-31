@@ -17,7 +17,7 @@ def get_movies():
 @api.route("/movies", methods=["POST"])
 @cross_origin()
 # @requires_auth(permission="post:movies")
-def insert_movie(user):
+def insert_movie(user=None):
     data = request.json
     title = data.get("title")
     release_date = data.get("release_date")
@@ -32,7 +32,7 @@ def insert_movie(user):
 @api.route("/movies/<int:id>", methods=["PATCH"])
 @cross_origin()
 # @requires_auth(permission="patch:movies")
-def update_movie(user, id):
+def update_movie(id, user=None):
     movie: Movie = Movie.query.get(id)
     if movie is None:
         abort(404)
@@ -71,12 +71,12 @@ def get_actors():
 @api.route("/actors", methods=["POST"])
 @cross_origin()
 # @requires_auth(permission="post:actors")
-def insert_actor(user):
+def insert_actor(user=None):
     data = request.json
-    title = data.get("title")
+    name = data.get("name")
     age = data.get("age")
     gender = data.get("gender")
-    actor = Actor(title=title, age=age, gender=gender)
+    actor = Actor(name=name, age=age, gender=gender)
     res = actor.insert()
     if res is not True:
         return jsonify({"status": 400, "success": res}), 400
@@ -86,15 +86,15 @@ def insert_actor(user):
 @api.route("/actors/<int:id>", methods=["PATCH"])
 @cross_origin()
 # @requires_auth(permission="patch:movies")
-def update_actor(user, id):
+def update_actor(id, user=None):
     actor: Actor = Actor.query.get(id)
     if actor is None:
         abort(404)
     data = request.json
-    title = data.get("title")
+    name = data.get("name")
     age = data.get("age")
     gender = data.get("gender")
-    actor.title = title
+    actor.name = name
     actor.age = age
     actor.gender = gender
     res = actor.update()
@@ -106,7 +106,7 @@ def update_actor(user, id):
 @api.route("/actors/<int:id>", methods=["DELETE"])
 @cross_origin()
 # @requires_auth(permission="delete:movies")
-def delete_actor(user, id):
+def delete_actor(id, user=None):
     actor: Actor = Actor.query.get(id)
     if actor is None:
         abort(404)

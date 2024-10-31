@@ -5,13 +5,14 @@ import json
 
 database_filename = "database.db"
 project_dir = os.path.dirname(os.path.abspath(__file__))
-database_path = "postgresql:///{}".format(os.path.join(project_dir, database_filename))
+SQLALCHEMY_DATABASE_URI = "postgresql://postgres:1@localhost:5432/postgres"
+# database_path = "postgresql:///{}".format(os.path.join(project_dir, database_filename))
 
 db = SQLAlchemy()
 
 
 def setup_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = database_path
+    app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
     db.app = app
     db.init_app(app)
 
@@ -94,16 +95,14 @@ class Actor(db.Model):
     __tablename__ = "actor"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(250))
-    age = db.Column(db.Interger)
+    name = db.Column(db.String(250))
+    age = db.Column(db.Integer)
     gender = db.Column(db.String(120))
-
-    movies = db.relationship("Movie", backref="actor", lazy=True)
 
     def get(self):
         return {
             "id": self.id,
-            "title": self.title,
+            "name": self.name,
             "age": self.age,
             "gender": self.gender,
         }
