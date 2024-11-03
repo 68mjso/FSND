@@ -5,15 +5,21 @@ from jose import jwt
 from urllib.request import urlopen
 import requests
 from jwt.algorithms import RSAAlgorithm
+import os
+from dotenv import load_dotenv
 
-AUTH0_DOMAIN = "dev-4pexrehivneu4hja.us.auth0.com"
+load_dotenv()
+
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
+API_AUDIENCE = os.getenv("API_AUDIENCE")
 ALGORITHMS = ["RS256"]
-API_AUDIENCE = "minhtq25-udacity-capstone"
+
 
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
+
 
 def get_token_auth_header():
     if "Authorization" not in request.headers:
@@ -26,9 +32,10 @@ def get_token_auth_header():
         abort(401)
     return header_parts[1]
 
+
 def check_permissions(permission, payload):
     if permission not in payload["permissions"]:
-        abort(401)
+        abort(403)
 
 
 def verify_decode_jwt(token):
@@ -69,6 +76,7 @@ def verify_decode_jwt(token):
     else:
         abort(401)
     return decoded_jwt
+
 
 def requires_auth(permission=""):
     def requires_auth_decorator(f):

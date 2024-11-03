@@ -3,7 +3,8 @@ from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from api import api
-from models import setup_db
+from models import setup_db, db
+from flask_migrate import Migrate
 
 
 def create_app(test_config=None):
@@ -11,7 +12,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     setup_db(app=app)
     CORS(app)
-
+    migrate = Migrate(app, db)
     app.register_blueprint(api, url_prefix=f"/")
 
     @app.errorhandler(404)

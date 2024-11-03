@@ -2,10 +2,17 @@ import os
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 import json
+from dotenv import load_dotenv
 
-database_filename = "database.db"
+load_dotenv()
+
 project_dir = os.path.dirname(os.path.abspath(__file__))
-SQLALCHEMY_DATABASE_URI = "postgresql://postgres:1@localhost:5432/postgres"
+host = os.getenv("DB_HOST")
+port = os.getenv("DB_PORT")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASS")
+db_name = os.getenv("DB_NAME")
+SQLALCHEMY_DATABASE_URI = f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 # database_path = "postgresql:///{}".format(os.path.join(project_dir, database_filename))
 
 db = SQLAlchemy()
@@ -38,10 +45,13 @@ class Movie(db.Model):
     )
 
     def get(self):
+        release_date = ""
+        if self.release_date is not None:
+            release_date = self.release_date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
         return {
             "id": self.id,
             "title": self.title,
-            "release_date": self.release_date.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
+            "release_date": release_date,
             "actors": [actor.get() for actor in self.actors],
         }
 
