@@ -1,0 +1,1 @@
+flask --app=src/app.py run --no-debugger --no-reload

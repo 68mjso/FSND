@@ -4,9 +4,9 @@ from models import setup_db, Movie, Actor
 import json
 import os
 
-api_1 = os.getenv("API_KEY_1")
-api_2 = os.getenv("API_KEY_2")
-api_3 = os.getenv("API_KEY_3")
+api_1 = os.environ("API_KEY_1")
+api_2 = os.environ("API_KEY_2")
+api_3 = os.environ("API_KEY_3")
 
 
 class CastingAssistantTest(unittest.TestCase):
