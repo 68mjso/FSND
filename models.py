@@ -9,7 +9,14 @@ port = os.getenv("DB_PORT")
 user = os.getenv("DB_USER")
 password = os.getenv("DB_PASS")
 db_name = os.getenv("DB_NAME")
-SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL") or f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+database_url = os.getenv("DATABASE_URL")
+
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+SQLALCHEMY_DATABASE_URI = (
+    database_url or f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+)
 # database_path = "postgresql:///{}".format(os.path.join(project_dir, database_filename))
 
 db = SQLAlchemy()
