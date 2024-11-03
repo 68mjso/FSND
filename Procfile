@@ -1,1 +1,1 @@
-web: flask --app=app.py run --no-debugger --no-reload
+web: python app.py

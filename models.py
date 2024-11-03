@@ -2,17 +2,14 @@ import os
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 import json
-from dotenv import load_dotenv
-
-load_dotenv()
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
-host = os.environ("DB_HOST")
-port = os.environ("DB_PORT")
-user = os.environ("DB_USER")
-password = os.environ("DB_PASS")
-db_name = os.environ("DB_NAME")
-SQLALCHEMY_DATABASE_URI = f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
+host = os.getenv("DB_HOST")
+port = os.getenv("DB_PORT")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASS")
+db_name = os.getenv("DB_NAME")
+SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL") or f"postgresql://{user}:{password}@{host}:{port}/{db_name}"
 # database_path = "postgresql:///{}".format(os.path.join(project_dir, database_filename))
 
 db = SQLAlchemy()
